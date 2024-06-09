@@ -1,0 +1,52 @@
+@media (max-width: 600px) {
+   .dashboard .cards {
+      gap: 0;
+   }
+   .dash-card {
+      flex-basis: 100% !important;
+      margin-bottom: 10px;
+   }
+}
+
+@media (max-width: 768px) {
+   .app-header .brand img {
+      display: none;
+   }
+   .app-header .brand {
+      padding-left: 0px;;
+   }
+   .dashboard .cards {
+      flex-wrap: wrap;
+   }
+   .dash-card {
+      flex-basis: 46%;
+   }
+}
+
+@media (max-width: 992px) {
+     .app-content {
+        margin-left: 0px;;
+    }
+    .sidebar {
+       display: none;
+       z-index: 9999;
+   }
+
+   .sidebar-overlay {
+      position: fixed;
+      height: 100vh;
+      background-color: var(--gray-400);
+      left: var(--sidebar-width);
+      top: 0;
+      z-index: 999999;;
+      width: 100%;;
+      opacity: .4;
+      display: none;
+   }
+    
+    
+}
+
+@media (max-width: 1200px) {
+    
+}

@@ -1,7 +1,7 @@
 <nav class="topnav navbar navbar-expand-lg navbar-light bg-white fixed-top">
 	<div class="container">
 		<a class="navbar-brand" href="<?=BASE_URI;?>">
-			<img src="<?=BASE_URI;?>/assets/img/logo.png" alt="">
+			<img src="<?=BASE_URI;?>/assets/img/Logo.png" alt="">
 		</a>
 		<button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>

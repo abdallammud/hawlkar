@@ -1,0 +1,24 @@
+RewriteEngine on
+
+RewriteRule ^/?$ index.php?menu=dashboard [NC,L]
+RewriteRule ^dashboard/?$ index.php?menu=dashboard [NC,L]
+
+
+
+
+RewriteRule ^articles/?$ index.php?menu=articles [NC,L]
+RewriteRule ^articles/create/?$ index.php?menu=articles&action=create [NC,L]
+
+
+RewriteRule ^users/?$ index.php?menu=users [NC,L]
+RewriteRule ^categories/?$ index.php?menu=categories [NC,L]
+RewriteRule ^setting/?$ index.php?menu=settings [NC,L]
+
+
+RewriteRule ^print/qrcode/?$ print.php?print=qrcode [NC,L]
+RewriteRule ^print/barcode/([A-Za-z0-9-]+)?$ print.php?print=barcode&code=$1 [NC,L]
+
+RewriteRule ^logout/?$ signout.php [NC,L]
+RewriteRule ^login/?$ login.php [NC,L]
+
+
