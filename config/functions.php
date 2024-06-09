@@ -1,6 +1,6 @@
 <?php 
 require('db.php');
-define("BASE_URI", "/projects/2024/hawlkar");
+define("BASE_URI", "https://hawlkar.com/");
 function clean($clear) {
 	// Strip HTML Tags
 	$clear = strip_tags($clear);
