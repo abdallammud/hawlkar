@@ -19,7 +19,7 @@ MAIN
 --------------------------------------->
     
 <!-- Featured stories -->
-    
+<!-- Some comment -->
 <div class="container">
 	<div class="row justify-content-between">
 		<div class="col-md-8" id="all-articles">
