@@ -168,8 +168,74 @@
                             </div>
                         </div>
                     </div>
-                   
-                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group flex wrap">
+                                <label class="label full-flex" for="twitter">Twitter <span class=" form-error">This is required</span></label>
+                                <input class="form-control" name="twitter" id="twitter"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group flex wrap">
+                                <label class="label full-flex" for="facebook">Facebook <span class=" form-error">This is required</span></label>
+                                <input  class="form-control full" id="facebook"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group flex wrap">
+                                <label class="label full-flex" for="web">Web <span class=" form-error">This is required</span></label>
+                                <input  class="form-control full" id="web"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="form-group flex wrap">
+                                <label class="label full-flex" for="bio">Bio <span class=" form-error">This is required</span></label>
+                                <textarea rows="2" class="form-control" name="bio" id="bio"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group flex wrap">
+                                <label class="label full-flex" for="linkedin">Linkedin <span class=" form-error">This is required</span></label>
+                                <input  class="form-control full" id="linkedin"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 </div>
             </div>
             <div class="modal-footer">

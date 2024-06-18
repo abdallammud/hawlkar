@@ -250,4 +250,56 @@ function get_userInfo($user_id, $username = '') {
     return $result;
 }
 
+function get_post($post_id) {
+	$result = [];
+	$get_articles = "SELECT 
+	A.`category_id`, 
+	A.`author_id`, 
+	`full_name`, 
+	`name`, 
+	`title`, 
+	A.`status`, 
+	A.`created_at`, 
+	`content`, 
+	`excerpt`,
+	`tags`,
+	`views`,
+	`post_id`,
+	`published_at`,
+	`is_featured`,
+	`image`
+	FROM `posts` A LEFT JOIN `users` U ON U.`user_id` = A.`author_id` LEFT JOIN `categories` C ON C.`category_id` = A.`category_id` WHERE `post_id` = '$post_id'";
+	 $articlesSet = $GLOBALS['conn']->query($get_articles);
+    $result = [];
+    while($row = $articlesSet->fetch_assoc()) {
+    	$post_id 		= $row['post_id'];
+		$title 			= $row['title'];
+		$content 		= $row['content'];
+		$excerpt 		= $row['excerpt'];
+		$category_id 	= $row['category_id'];
+		$author_id 		= $row['author_id'];
+		$status 		= ucwords(str_replace("'", '', $row['status']));
+		$is_featured 	= ucwords(str_replace("'", '', $row['is_featured']));
+		$created_at 	= new dateTime($row['created_at']);
+		$image 			= $row['image'];
+
+		$created_at 	= $created_at->format('F d, Y');
+		if(!$excerpt) $excerpt = substr($content, 0, 200);
+		$excerpt = clean(substr($excerpt, 0, 100));
+
+		$category 		= strtoupper($row['name']);
+		$author 		= $row['full_name'];
+
+    	$wpm 		= 300;
+    	$words 		= preg_split('/\s+/', $content);
+		$wordCount 	= count($words);
+		$time 		= ceil($wordCount/$wpm);
+
+		$result[] = $row;
+
+		// $article .= '<div class="article">'.$content.'<div>';
+	}
+	return $result;
+}
+
 ?>

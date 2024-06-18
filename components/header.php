@@ -1,18 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8"/>
-<link rel="apple-touch-icon" sizes="76x76" href="<?=BASE_URI;?>/assets/img/icon.png">
-<link rel="icon" type="image/png" href="<?=BASE_URI;?>/assets/img/icon.png">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-<title>Hawlkar | Igniting the Spark Within</title>
-<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport'/>
-<!-- Google Font -->
-<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700|Source+Sans+Pro:400,600,700" rel="stylesheet">
-<!-- Font Awesome Icons -->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-<!-- Main CSS -->
-<link href="<?=BASE_URI;?>/assets/css/main.css" rel="stylesheet"/>
-<link href="<?=BASE_URI;?>/assets/css/hawlkar.css" rel="stylesheet"/>
+
+    <!-- Basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- Site Metas -->
+    <title>Hawlkar</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <!-- Site Icons -->
+    <link rel="icon" type="image/png" href="<?=BASE_URI;?>/assets/images/icon.png">
+    <link rel="apple-touch-icon" href="<?=BASE_URI;?>/assets/images/icon.png">
+    
+    <!-- Design fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet"> 
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Bootstrap core CSS -->
+    <link href="<?=BASE_URI;?>/assets/css/bootstrap.css" rel="stylesheet">
+
+    <!-- FontAwesome Icons core CSS -->
+    <link href="<?=BASE_URI;?>/assets/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="<?=BASE_URI;?>/assets/css/style.css" rel="stylesheet">
+
+    <!-- Responsive styles for this template -->
+    <link href="<?=BASE_URI;?>/assets/css/responsive.css" rel="stylesheet">
+
+    <!-- Colors for this template -->
+    <link href="<?=BASE_URI;?>/assets/css/colors.css" rel="stylesheet">
+
+    <!-- Version Garden CSS for this template -->
+    <link href="<?=BASE_URI;?>/assets/css/version/garden.css" rel="stylesheet">
+
+    <!-- Hawlkar -->
+    <link href="<?=BASE_URI;?>/assets/css/hawlkar.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
 <body>

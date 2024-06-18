@@ -1,6 +1,7 @@
 <?php 
 require('db.php');
-define("BASE_URI", "https://hawlkar.com/");
+define("BASE_URI", "/projects/2024/hawlkar");
+
 function clean($clear) {
 	// Strip HTML Tags
 	$clear = strip_tags($clear);
@@ -17,6 +18,7 @@ function clean($clear) {
 
 	return $clear;
 }
+
 function navbar() {
 	$navs = '';
 	$get_category = "SELECT * FROM `categories` WHERE `status`  IN ('Published')";
@@ -30,8 +32,10 @@ function navbar() {
     	if(isset($_GET['menu'])) {
     		$menu = $_GET['menu'];
     	}
-    	$navs .= '<li class="nav-item active">
-            <a class="nav-link ';
+
+
+    	$navs .= '<li class="nav-item">
+            <a class="nav-link color-green-hover';
             if(strtolower($menu) == strtolower($category)) $navs .= ' active ';
             $navs .= '" href="'.BASE_URI.'/'.$link.'">'.$category.'</a>
         </li>';
@@ -55,7 +59,7 @@ function all_articles($date = '') {
 	`excerpt`, 
 	`post_id`,
 	`published_at`,
-	`is_popular`,
+	`is_featured`,
 	`image`
 	FROM `posts` A LEFT JOIN `users` U ON U.`user_id` = A.`author_id` LEFT JOIN `categories` C ON C.`category_id` = A.`category_id` WHERE A.`status`  IN ('Published') ";
 
@@ -75,7 +79,7 @@ function all_articles($date = '') {
 		$category_id 	= $row['category_id'];
 		$author_id 		= $row['author_id'];
 		$status 		= ucwords(str_replace("'", '', $row['status']));
-		$is_popular 	= ucwords(str_replace("'", '', $row['is_popular']));
+		$is_featured 	= ucwords(str_replace("'", '', $row['is_featured']));
 		$created_at 	= new dateTime($row['created_at']);
 		$image 			= $row['image'];
 
@@ -104,7 +108,7 @@ function all_articles($date = '') {
 			</div>
 		</a>';
     	
-    	if($is_popular == 'Yes') {
+    	if($is_featured == 'Yes') {
     		$popular .= '<li>
 				<span>
 					<h6 class="font-weight-bold">
@@ -122,9 +126,6 @@ function all_articles($date = '') {
 }
 
 function get_signleArticle($id) {
-	$article = '';
-	$all_articles = '';
-	$popular = '';
 	$get_articles = "SELECT 
 	A.`category_id`, 
 	A.`author_id`, 
@@ -134,15 +135,16 @@ function get_signleArticle($id) {
 	A.`status`, 
 	A.`created_at`, 
 	`content`, 
-	`excerpt`, 
+	`excerpt`,
+	`tags`,
+	`views`,
 	`post_id`,
 	`published_at`,
-	`is_popular`,
+	`is_featured`,
 	`image`
 	FROM `posts` A LEFT JOIN `users` U ON U.`user_id` = A.`author_id` LEFT JOIN `categories` C ON C.`category_id` = A.`category_id` WHERE A.`status`  IN ('Published') AND `post_id` = '$id'";
 	 $articlesSet = $GLOBALS['conn']->query($get_articles);
-    $result['articles'] = [];
-    $result['popular'] = [];
+    $result = [];
     while($row = $articlesSet->fetch_assoc()) {
     	$post_id 		= $row['post_id'];
 		$title 			= $row['title'];
@@ -151,7 +153,7 @@ function get_signleArticle($id) {
 		$category_id 	= $row['category_id'];
 		$author_id 		= $row['author_id'];
 		$status 		= ucwords(str_replace("'", '', $row['status']));
-		$is_popular 	= ucwords(str_replace("'", '', $row['is_popular']));
+		$is_featured 	= ucwords(str_replace("'", '', $row['is_featured']));
 		$created_at 	= new dateTime($row['created_at']);
 		$image 			= $row['image'];
 
@@ -167,102 +169,192 @@ function get_signleArticle($id) {
 		$wordCount 	= count($words);
 		$time 		= ceil($wordCount/$wpm);
 
-		$article .= '<div class="article">'.$content.'<div>';
+		$result[] = $row;
+
+		// $article .= '<div class="article">'.$content.'<div>';
 	}
-	return $article;
+	return $result;
 }
 
-if(isset($_GET['get'])) {
-	if($_GET['get'] == 'navbar') {
-		$result = array('status' => 200, 'error' => false, 'msg' => 'good');
-		$get_category = "SELECT * FROM `categories` WHERE `status`  IN ('Published')";
-	    $categorySet = $GLOBALS['conn']->query($get_category);
+function get_featuredPosts() {
+	$posts = [];
+	$limit = 3;
+	$get_articles = "SELECT 
+    A.`category_id`, 
+    A.`author_id`, 
+    `full_name`, 
+    `name`, 
+    `title`, 
+    A.`status`, 
+    A.`created_at`, 
+    `excerpt`, 
+    `post_id`,
+    `published_at`,
+    `views`,
+    `is_featured`,
+    `image`
+    FROM `posts` A 
+    LEFT JOIN `users` U ON U.`user_id` = A.`author_id` 
+    LEFT JOIN `categories` C ON C.`category_id` = A.`category_id` 
+    WHERE A.`status`  IN ('Published') AND `is_featured` = 'Yes'";
 
-	    $result['navs'] = [];
-	    while($row = $categorySet->fetch_assoc()) {
-	    	// 
-	    	$category = $row['name'];
-	    	$link = strtolower(str_replace(" ", "_", $category));
+	// Apply limit
+	$get_articles .= " LIMIT $limit";
 
-	    	$array = array('category' => $category, 'link' => $link);
-	    	array_push($result['navs'], $array);
-	    	
-	    }
-	    echo json_encode($result);
-	} else if($_GET['get'] == 'articles') {
-		$result = array('status' => 200, 'error' => false, 'msg' => 'good');
+	// Execute query and fetch results
+	$result = $GLOBALS['conn']->query($get_articles);
 
-		$category = '';
-		if(isset($_POST['category'])) $category = $_POST['category'];
-
-		$category = str_replace("_", " ", $category);
-
-		$get_articles = "SELECT 
-		A.`category_id`, 
-		A.`author_id`, 
-		`full_name`, 
-		`name`, 
-		`title`, 
-		A.`status`, 
-		A.`created_at`, 
-		`content`, 
-		`excerpt`, 
-		`post_id`,
-		`published_at`,
-		`is_popular`,
-		`image`
-		FROM `posts` A LEFT JOIN `users` U ON U.`user_id` = A.`author_id` LEFT JOIN `categories` C ON C.`category_id` = A.`category_id` WHERE A.`status`  IN ('Published') ";
-
-		if($category) {
-			$get_articles .= " AND C.`name` LIKE '$category%'";
-		}
-
-	    $articlesSet = $GLOBALS['conn']->query($get_articles);
-	    $result['articles'] = [];
-	    $result['popular'] = [];
-	    while($row = $articlesSet->fetch_assoc()) {
-	    	$post_id 		= $row['post_id'];
-			$title 			= $row['title'];
-			$content 		= $row['content'];
-			$excerpt 		= $row['excerpt'];
-			$category_id 	= $row['category_id'];
-			$author_id 		= $row['author_id'];
-			$status 		= ucwords(str_replace("'", '', $row['status']));
-			$is_popular 	= ucwords(str_replace("'", '', $row['is_popular']));
-			$created_at 	= new dateTime($row['created_at']);
-			$image 			= $row['image'];
-
-			$created_at 	= $created_at->format('F d, Y');
-			if(!$excerpt) $excerpt = substr($content, 0, 200);
-			$excerpt = clean(substr($excerpt, 0, 100));
-
-			$category 		= strtoupper($row['name']);
-			$author 		= $row['full_name'];
-	    	// $published_at 	= new dateTime($row['published_at']);
-	    	// $published_at 	= $published_at->format('M d');
-
-	    	$wpm 		= 300;
-	    	$words 		= preg_split('/\s+/', $content);
-			$wordCount 	= count($words);
-			$time 		= ceil($wordCount/$wpm);
-
-	    	$link 			= strtolower(str_replace(" ", "_", $title));
-	    	$link = str_replace(",", "", $link);
-	    	$array 			= array('title' => $title, 'link' => $link, 'excerpt' => $excerpt, 'category' => $category, 'author' => $author, 'published_at' => $created_at, 'image' => $image, 'time' => $time);
-
-	    	if($is_popular == 'Yes') {
-	    		array_push($result['popular'], $array);
-	    	} else {
-	    		array_push($result['articles'], $array);
-	    	}
-	    	
-	    	
-	    }
-	    echo json_encode($result);
+	while($row = $result->fetch_assoc()) {
+	    $posts[] = $row;
 	}
-} else {
 
+	// Return posts data as JSON
+	return  $posts;
 }
+
+function make_categoryLink($category) {
+	return $link = strtolower(str_replace(" ", "_", $category));
+}
+function get_categories() {
+	$result = [];
+	$get_categories = "SELECT * FROM `categories` WHERE `status`  IN ('Published')";
+	$categorySet = $GLOBALS['conn']->query($get_categories);
+    while($row = $categorySet->fetch_assoc()) {
+    	$result[] = $row;
+    }
+    return $result;
+}
+
+function get_categoryPostsCount($category_id) {
+	$posts = $GLOBALS['conn']->query("SELECT `post_id` FROM `posts` WHERE `category_id` = '$category_id'");
+	return $posts->num_rows;
+}
+
+function get_authorInfo($user_id, $username = '') {
+	$name = $parent_id = '';
+	$result = [];
+	$get_user = "SELECT * FROM `users` WHERE `user_id` = '$user_id'";
+	if($username) $get_user = "SELECT * FROM `users` WHERE `username` = '$username'";
+    $userSet = $GLOBALS['conn']->query($get_user);
+    while($row = $userSet->fetch_assoc()) {
+    	$result = $row;
+    }
+
+   
+
+    return $result;
+}
+
+function add_articleView($post_id) {
+	$stmt = $GLOBALS['conn']->prepare("UPDATE `posts` SET `views` =? WHERE `post_id` =?");
+    $stmt->bind_param("ss", $views, $post_id);
+    $postInfo = get_signleArticle($post_id)[0];
+	$views = $postInfo['views']+1;
+   	$stmt->execute();
+}
+
+function get_articles4Category($category_id, $limit = 10) {
+	$posts = [];
+	$get_articles = "SELECT 
+    A.`category_id`, 
+    A.`author_id`, 
+    `full_name`, 
+    `name`, 
+    `title`, 
+    A.`status`, 
+    A.`created_at`, 
+    `excerpt`, 
+    `post_id`,
+    `published_at`,
+    `views`,
+    `is_featured`,
+    `image`
+    FROM `posts` A 
+    LEFT JOIN `users` U ON U.`user_id` = A.`author_id` 
+    LEFT JOIN `categories` C ON C.`category_id` = A.`category_id` 
+    WHERE A.`status`  IN ('Published') AND A.`category_id` = '$category_id'";
+
+	// Apply limit
+	$get_articles .= " LIMIT $limit";
+
+	// Execute query and fetch results
+	$result = $GLOBALS['conn']->query($get_articles);
+
+	while($row = $result->fetch_assoc()) {
+	    $posts[] = $row;
+	}
+
+	// Return posts data as JSON
+	return  $posts;
+}
+
+
+function formatDate($inputDate) {
+  // Parse input string into a DateTime object
+  $date = new DateTime($inputDate);
+
+  // Define month names
+  $monthNames = array(
+    "January", "February", "March",
+    "April", "May", "June", "July",
+    "August", "September", "October",
+    "November", "December"
+  );
+
+  // Extract components
+  $day = $date->format('d');
+  $month = strtoupper($monthNames[$date->format('n') - 1]);
+  $year = $date->format('Y');
+
+  // Format the desired date string
+  $formattedDate = "$day $month, $year";
+
+  return $formattedDate;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

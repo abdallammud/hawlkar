@@ -139,6 +139,11 @@ function loadEmployees() {
 	            		data-status="${row.status}"
 	            		data-actions="${row.user_actions}"
 	            		data-privileges="${row.user_privileges}"
+	            		data-twitter="${row.twitter}"
+	            		data-facebook="${row.facebook}"
+	            		data-web="${row.web}"
+	            		data-bio="${row.bio}"
+	            		data-linkedin="${row.linkedin}"
 	            		onclick="return editEmployeePopup(this)"
 	            		></span>
 		            	<span>${row.full_name}</span>
@@ -177,6 +182,8 @@ function editEmployeePopup(btn) {
 	let data = $(btn).data()
 	let modal = $('.modal#editEmployee');
 
+	console.log(data)
+
 	$(modal).find('#user_id').val(data.user_id)
 	$(modal).find('#fullNameEdit').val(data.full_name)
 	$(modal).find('#phoneEdit').val(data.phone)
@@ -197,6 +204,12 @@ function editEmployeePopup(btn) {
 		$('select#userPrivileges4Edit')[0].sumo.reload();
 	})
 
+	$(modal).find('#twitter').val(data.twitter)
+	$(modal).find('#facebook').val(data.facebook)
+	$(modal).find('#web').val(data.web)
+	$(modal).find('#bio').val(data.bio)
+	$(modal).find('#linkedin').val(data.linkedin)
+
 	$(modal).modal('show');
 	console.log(data)
 }
@@ -211,6 +224,13 @@ function editEmployee(form) {
 
 	let userActions 	= $(form).find('#userActions4Edit').val();
 	let userPrivileges 	= $(form).find('#userPrivileges4Edit').val();
+
+
+	let twitter 	= $(form).find('#twitter').val();
+	let facebook 	= $(form).find('#facebook').val();
+	let web 		= $(form).find('#web').val();
+	let linkedin 	= $(form).find('#linkedin').val();
+	let bio 		= $(form).find('#bio').val();
 
 	if(!fullName) {
 		showError('Name is required.', 'fullNameEdit');
@@ -244,7 +264,12 @@ function editEmployee(form) {
 		slcRole,
 		user_id,
 		userActions,
-		userPrivileges
+		userPrivileges,
+		twitter,
+		facebook,
+		web,
+		bio,
+		linkedin
 	}
 
 	$.post("./incs/main.php?action=update&update=employee", formData, function(data) {
@@ -504,7 +529,7 @@ function submitArticle(form) {
     formdata.append("articleTags", articleTags);
 	var ajax = new XMLHttpRequest();
 	ajax.addEventListener("load", function(event) {
-		// console.log(event.target.response)
+		console.log(event.target.response)
 			$(form).find('button span.loader').removeClass('ld-ring ld-spin')
 			$(form).find('button span.text').html('Submit');
 			$(form).find('button').attr('disabled', false)

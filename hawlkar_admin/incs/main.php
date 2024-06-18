@@ -124,7 +124,7 @@ if(isset($_GET['action'])) {
 				// Check if form is submitted and there is no error
 				if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
 					// Get file information
-				    $target_dir = "../../assets/img/articles/";
+				    $target_dir = "../../assets/images/articles/";
 				    $file_name = basename($_FILES["file"]["name"]);
 
 				    $temp = explode(".", $_FILES["file"]["name"]);
@@ -162,7 +162,7 @@ if(isset($_GET['action'])) {
 				    }
 
 				    // Allow certain file formats
-				    $allowed_extensions = array("jpg", "jpeg", "png", "gif");
+				    $allowed_extensions = array("jpg", "jpeg", "png", "gif", "webp");
 				    $file_extension = pathinfo($target_file, PATHINFO_EXTENSION);
 				    if (!in_array($file_extension, $allowed_extensions)) {
 				        $uploadOk = false;
@@ -231,7 +231,6 @@ if(isset($_GET['action'])) {
 				$orderBy = $_POST['order'][0]['column'];
 				$order = strtoupper($_POST['order'][0]['dir']);
 			}
-
 
 			$dataset = array();
 			if($_GET['load'] == 'employees') {
@@ -423,6 +422,12 @@ if(isset($_GET['action'])) {
 				$slcRole 	= $_POST['slcRole'];
 				$slcStatus 	= $_POST['slcStatus'];
 
+				$twitter 	= $_POST['twitter'];
+				$facebook 	= $_POST['facebook'];
+				$web 		= $_POST['web'];
+				$bio 		= $_POST['bio'];
+				$linkedin 	= $_POST['linkedin'];
+
 				$userActions = $userPrivileges = [];
 				if(isset($_POST['userActions'])) $userActions 	= $_POST['userActions'];
 				if(isset($_POST['userPrivileges'])) $userPrivileges	= $_POST['userPrivileges'];
@@ -448,8 +453,8 @@ if(isset($_GET['action'])) {
 				}
 
 				$updated_date = date('Y-m-d h:i:s');
-		        $stmt = $GLOBALS['conn']->prepare("UPDATE `users` SET `full_name` =?, `phone` = ?, `email` = ?,  `role` = ?, `user_actions` =?, `user_privileges` =?, `status` = ?, `updated_date` = ?, `updated_by` = ? WHERE `user_id` = ?");
-		        $stmt->bind_param("ssssssssss", $fullName, $phone, $email,  $slcRole, $actions, $privileges,  $slcStatus, $updated_date,  $myUser, $user_id);
+		        $stmt = $GLOBALS['conn']->prepare("UPDATE `users` SET `full_name` =?, `phone` = ?, `email` = ?,  `role` = ?, `user_actions` =?, `user_privileges` =?, `twitter` =?, `facebook` =?, `web` =?, `bio` =?, `linkedin` =?, `status` = ?, `updated_date` = ?, `updated_by` = ? WHERE `user_id` = ?");
+		        $stmt->bind_param("sssssssssssssss", $fullName, $phone, $email,  $slcRole, $actions, $privileges, $twitter, $facebook, $web, $bio, $linkedin, $slcStatus, $updated_date,  $myUser, $user_id);
 		        if(!$stmt->execute()) {
 		            $result['msg']    = ' Couln\'t edit employee details.';
 		            $result['error'] = true;
@@ -515,7 +520,9 @@ if(isset($_GET['action'])) {
 				$post_id = $_POST['post_id'];
 				$author_id = $_POST['slcAuthor4Edit'];
 
-				$image = '';
+				$postInfo = get_post($post_id)[0];
+				// var_dump($postInfo);
+				$image = $postInfo['image'];
 
 				$excerpt = substr(clean($article), 0, 200)."....";
 
@@ -526,7 +533,7 @@ if(isset($_GET['action'])) {
 				// Check if form is submitted and there is no error
 				if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
 					// Get file information
-				    $target_dir = "../../assets/img/articles/";
+				    $target_dir = "../../assets/images/articles/";
 				    $file_name = basename($_FILES["file"]["name"]);
 
 				    $temp = explode(".", $_FILES["file"]["name"]);
@@ -564,7 +571,7 @@ if(isset($_GET['action'])) {
 				    }
 
 				    // Allow certain file formats
-				    $allowed_extensions = array("jpg", "jpeg", "png", "gif");
+				    $allowed_extensions = array("jpg", "jpeg", "png", "gif", "webp");
 				    $file_extension = pathinfo($target_file, PATHINFO_EXTENSION);
 				    if (!in_array($file_extension, $allowed_extensions)) {
 				        $uploadOk = false;
